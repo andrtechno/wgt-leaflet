@@ -41,7 +41,7 @@ class LeafletWidget extends Widget
         $view = $this->getView();
         $this->registerAssets($view);
         if (!isset($this->containerOptions['class'])) {
-            $this->containerOptions['class'] = 'owl-carousel';
+            $this->containerOptions['class'] = 'owl-leaflet';
         }
         $this->initOptions();
         echo Html::beginTag($this->containerTag, $this->containerOptions) . "\n";
@@ -55,7 +55,7 @@ class LeafletWidget extends Widget
         $this->containerOptions = array_merge([
             'id' => $this->getId()
         ], $this->containerOptions);
-        Html::addCssClass($this->containerOptions, 'owl-carousel');
+        Html::addCssClass($this->containerOptions, 'owl-leaflet');
     }
 
     /**
@@ -65,8 +65,22 @@ class LeafletWidget extends Widget
      */
     public function registerAssets($view)
     {
-        OwlCarouselAsset::register($view);
-        $js = 'jQuery("#' . $this->getId() . '").owlCarousel(' . Json::encode($this->options) . ');';
+        LeafletAsset::register($view);
+        $js = '
+        
+        
+var map = L.map("' . $this->getId() . '").setView([51.505, -0.09], 13);
+
+L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    attribution: "&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors"
+}).addTo(map);
+
+
+L.marker([51.5, -0.09]).addTo(map)
+    .bindPopup("A pretty CSS3 popup.<br> Easily customizable.")
+    .openPopup();
+
+';
         $view->registerJs($js, $view::POS_END);
     }
 
