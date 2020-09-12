@@ -1,13 +1,14 @@
-wgt-multi-input Widget
+leaflet Widget
 ============================
 
+The [Leaflet](https://leafletjs.com/)
 
-[![Latest Stable Version](https://poser.pugx.org/panix/wgt-multiple-input/v/stable)](https://packagist.org/packages/panix/wgt-multiple-input)
-[![Total Downloads](https://poser.pugx.org/panix/wgt-multiple-input/downloads)](https://packagist.org/packages/panix/wgt-multiple-input)
-[![Monthly Downloads](https://poser.pugx.org/panix/wgt-multiple-input/d/monthly)](https://packagist.org/packages/panix/wgt-multiple-input)
-[![Daily Downloads](https://poser.pugx.org/panix/wgt-multiple-input/d/daily)](https://packagist.org/packages/panix/wgt-multiple-input)
-[![Latest Unstable Version](https://poser.pugx.org/panix/wgt-multiple-input/v/unstable)](https://packagist.org/packages/panix/wgt-multiple-input)
-[![License](https://poser.pugx.org/panix/wgt-multiple-input/license)](https://packagist.org/packages/panix/wgt-multiple-input)
+[![Latest Stable Version](https://poser.pugx.org/panix/wgt-leaflet/v/stable)](https://packagist.org/packages/panix/wgt-leaflet)
+[![Total Downloads](https://poser.pugx.org/panix/wgt-leaflet/downloads)](https://packagist.org/packages/panix/wgt-leaflet)
+[![Monthly Downloads](https://poser.pugx.org/panix/wgt-leaflet/d/monthly)](https://packagist.org/packages/panix/wgt-leaflet)
+[![Daily Downloads](https://poser.pugx.org/panix/wgt-leaflet/d/daily)](https://packagist.org/packages/panix/wgt-leaflet)
+[![Latest Unstable Version](https://poser.pugx.org/panix/wgt-leaflet/v/unstable)](https://packagist.org/packages/panix/wgt-leaflet)
+[![License](https://poser.pugx.org/panix/wgt-leaflet/license)](https://packagist.org/packages/panix/wgt-leaflet)
 
 
 Installation
@@ -18,13 +19,13 @@ The preferred way to install this extension is through [composer](http://getcomp
 Either run
 
 ```
-php composer require --prefer-dist panix/wgt-multi-input "*"
+php composer require --prefer-dist panix/wgt-leaflet "*"
 ```
 
 or add
 
 ```
-"panix/wgt-multi-input": "*"
+"panix/wgt-leaflet": "*"
 ```
 
 to the require section of your `composer.json` file.

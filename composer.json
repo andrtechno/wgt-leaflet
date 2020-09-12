@@ -1,8 +1,8 @@
 {
-    "name": "panix/wgt-multiple-input",
-    "description": "Widget multipleinput",
-    "keywords": ["pixelion-cms", "extension", "widget", "multipleinput"],
-    "homepage": "https://github.com/andrtechno/wgt-multiple-input",
+    "name": "panix/wgt-leaflet",
+    "description": "Widget leaflet",
+    "keywords": ["extension", "widget", "leaflet"],
+    "homepage": "https://github.com/andrtechno/wgt-leaflet",
     "type": "yii2-extension",
     "license": "MIT",
     "authors": [
@@ -12,9 +12,12 @@
             "homepage": "https://pixelion.com.ua"
         }
     ],
+    "require": {
+        "bower-asset/leaflet": "^1.7"
+    },
     "autoload": {
         "psr-4": {
-            "panix\\ext\\multipleinput\\": ""
+            "panix\\ext\\leaflet\\": ""
         }
     }
 }
