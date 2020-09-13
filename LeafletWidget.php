@@ -67,23 +67,15 @@ var map = L.map("' . $this->getId() . '",{
      // layers: [osmLayer]
     });
 
-/*L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png?hash={hash}", {
-    hash: Math.random(),
-    attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>"
-      //maxZoom: 17,
-      //minZoom: 9
-}).addTo(map);*/
-
-
 L.tileLayer("http://{s}.tile.osm.org/{z}/{x}/{y}.png", {
     attribution: "&copy; <a href=\"http://osm.org/copyright\">OpenStreetMap</a> contributors 2"
 }).addTo(map);
 
 var marker = L.marker([46.44136,30.70430],{
     draggable: true
-    }).addTo(map)
-        .bindPopup("A pretty CSS3 popup.<br> Easily customizable.")
-        .openPopup();
+    }).addTo(map);
+//marker.bindPopup("A pretty CSS3 popup.<br> Easily customizable.")
+//marker.openPopup();
 
 marker.on("dragend", function(distance){
 console.log(distance.target._latlng.lat,distance.target._latlng.lng);
