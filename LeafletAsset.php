@@ -9,7 +9,7 @@ class LeafletAsset extends AssetBundle
 {
 
     public $jsOptions = [
-        'position' => \yii\web\View::POS_END
+        'position' => \yii\web\View::POS_HEAD
     ];
     /**
      * @var string the directory that contains the source asset files for this asset bundle.
@@ -29,12 +29,4 @@ class LeafletAsset extends AssetBundle
     public $js = [
         'dist/leaflet.js',
     ];
-
-    /**
-     * @var array list of depends assets that this bundle contains.
-     */
-    public $depends = [
-        'yii\web\JqueryAsset',
-    ];
-
 }
