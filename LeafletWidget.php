@@ -25,6 +25,7 @@ class LeafletWidget extends Widget
      * Defaults to an auto generated id and class => "owl-carousel"
      */
     public $containerOptions = [];
+    public $mapOptions = [];
     public $width = '100%';
     public $height = '300px';
     /**
@@ -33,6 +34,10 @@ class LeafletWidget extends Widget
      */
     public $options = [];
 
+    public $lat;
+    public $lng;
+
+    public $markers = [];
     /**
      * Initializes the widget.
      */
@@ -58,10 +63,12 @@ class LeafletWidget extends Widget
         LeafletAsset::register($view);
         $js = '
         
+        var mapid = "' . $this->getId() . '";
+        var map_markers = ' . Json::encode($this->markers) . ';
         
-var map = L.map("' . $this->getId() . '",{
+var map = L.map(mapid,{
       //center: new L.LatLng(46.44136,30.70430),
-      center: [46.44136,30.70430],
+      center: ['.$this->lat.','.$this->lng.'],
       zoom: 13,
 
      // layers: [osmLayer]
@@ -71,16 +78,32 @@ L.tileLayer("http://{s}.tile.osm.org/{z}/{x}/{y}.png", {
     attribution: "&copy; <a href=\"http://osm.org/copyright\">OpenStreetMap</a> contributors 2"
 }).addTo(map);
 
-var marker = L.marker([46.44136,30.70430],{
-    draggable: true
+
+$.each(map_markers,function(i,mark){
+    console.log(mark);
+    var marker = L.marker(mark.coords,{
+        draggable: mark.draggable
     }).addTo(map);
+    
+    if(mark.draggable){
+        marker.on("dragend", function(distance){
+            console.log(distance.target._latlng);
+            $("#dynamicmodel-latitude").val(distance.target._latlng.lat);
+            $("#dynamicmodel-longitude").val(distance.target._latlng.lng);
+        });
+    }
+});
+
+//var marker = L.marker(['.$this->lat.','.$this->lng.'],{
+//    draggable: false
+//    }).addTo(map);
 //marker.bindPopup("A pretty CSS3 popup.<br> Easily customizable.")
 //marker.openPopup();
 
 marker.on("dragend", function(distance){
-console.log(distance.target._latlng.lat,distance.target._latlng.lng);
-$("#dynamicmodel-latitude").val(distance.target._latlng.lat);
-$("#dynamicmodel-longitude").val(distance.target._latlng.lng);
+    console.log(distance.target._latlng);
+    $("#dynamicmodel-latitude").val(distance.target._latlng.lat);
+    $("#dynamicmodel-longitude").val(distance.target._latlng.lng);
 });
 
 
