@@ -3,7 +3,7 @@
     "description": "Widget leaflet",
     "keywords": ["extension", "widget", "leaflet"],
     "homepage": "https://github.com/andrtechno/wgt-leaflet",
-    "type": "yii2-extension",
+    "type": "pixelion-component",
     "license": "MIT",
     "authors": [
         {
