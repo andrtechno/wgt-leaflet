@@ -36,8 +36,9 @@ class LeafletWidget extends Widget
 
     public $lat;
     public $lng;
-
+    public $routing = true;
     public $markers = [];
+
     /**
      * Initializes the widget.
      */
@@ -60,33 +61,49 @@ class LeafletWidget extends Widget
      */
     public function registerAssets($view)
     {
+        $this->routing = boolval($this->routing);
+        $markers = Json::encode($this->markers);
         LeafletAsset::register($view);
-        $js = '
-        
-        var mapid = "' . $this->getId() . '";
-        var map_markers = ' . Json::encode($this->markers) . ';
-        
-var map = L.map(mapid,{
-      //center: new L.LatLng(46.44136,30.70430),
-      center: ['.$this->lat.','.$this->lng.'],
-      zoom: 13,
+        LeafletRoutingAsset::register($view);
+        $assetCore = LeafletCoreAsset::register($view);
 
+        $js = <<<JS
+        var mapid = "{$this->id}";
+        var enableRouting = {$this->routing};
+        var map_markers = {$markers};
+        var boundsArray=[];
+        var map = L.map(mapid,{
+      //center: new L.LatLng(46.44136,30.70430),
+      center: ['{$this->lat}','{$this->lng}'],
+      zoom: 13,
      // layers: [osmLayer]
     });
-
-L.tileLayer("http://{s}.tile.osm.org/{z}/{x}/{y}.png", {
-    attribution: "&copy; <a href=\"http://osm.org/copyright\">OpenStreetMap</a> contributors 2"
+        var bounds = map.getBounds();
+L.tileLayer("https://{s}.tile.osm.org/{z}/{x}/{y}.png", {
+    attribution: "&copy; <a href=\"https://osm.org/copyright\">OpenStreetMap</a> contributors 2"
 }).addTo(map);
 
-
+var waypointsArray = [];
+var markersList = [];
 $.each(map_markers,function(i,mark){
-    console.log(mark);
-    var marker = L.marker(mark.coords,{
+
+    markersList[i] = L.marker(mark.coords,{
         draggable: mark.draggable
     }).addTo(map);
     
+    if(mark.popup){
+        markersList[i].bindPopup(mark.popup)
+    }
+    
+    if(mark.label){
+        markersList[i].bindTooltip(mark.label,{permanent:true}).openTooltip();
+    }
+
+    waypointsArray.push(L.latLng(mark.coords[0], mark.coords[1]));
+    console.log(waypointsArray);
+    boundsArray.push([mark.coords]);
     if(mark.draggable){
-        marker.on("dragend", function(distance){
+        markersList[i].on("dragend", function(distance){
             console.log(distance.target._latlng);
             $("#dynamicmodel-latitude").val(distance.target._latlng.lat);
             $("#dynamicmodel-longitude").val(distance.target._latlng.lng);
@@ -94,20 +111,87 @@ $.each(map_markers,function(i,mark){
     }
 });
 
-//var marker = L.marker(['.$this->lat.','.$this->lng.'],{
-//    draggable: false
-//    }).addTo(map);
-//marker.bindPopup("A pretty CSS3 popup.<br> Easily customizable.")
-//marker.openPopup();
+   
+var bounds = new L.LatLngBounds(boundsArray);
+map.fitBounds(bounds);
+if(enableRouting){
 
-marker.on("dragend", function(distance){
-    console.log(distance.target._latlng);
-    $("#dynamicmodel-latitude").val(distance.target._latlng.lat);
-    $("#dynamicmodel-longitude").val(distance.target._latlng.lng);
+var routingControl = L.Routing.control({
+    waypoints: waypointsArray,
+    show:false,
+    draggableWaypoints:false,
+    addWaypoints:false,
+    routeLine: function(route) {
+        var line = L.Routing.line(route, {
+            addWaypoints: false,
+            routeWhileDragging: false,
+            autoRoute: true,
+            useZoomParameter: false,
+            draggableWaypoints: false,
+            styles:[
+                {color: 'black', opacity: 0.9, weight: 9},
+                {color: 'white', opacity: 1, weight: 6},
+                {color: 'red', opacity: 1, weight: 2}
+            ]
+        });
+            
+        line.eachLayer(function(l) {
+            l.on('click', function(e) {
+                if($(routingControl._container).hasClass('leaflet-routing-container-hide')){
+                    routingControl.show();
+                }else{
+                    routingControl.hide();
+                }
+                console.log(e);
+            });
+        });
+        return line;
+    },
+    //remove markers routing
+    //createMarker: function(i, wp, nWps) {
+    //    return null;
+    //}
+  createMarker: function(i, wp, nWps) {
+       // console.log("createMarker",wp);
+    if (i === 0 || i === nWps - 1) {
+     // return L.marker(wp.latLng, {
+     //   icon: greenIcon
+     // });
+     var start=wp.latLng;
+    } else {
+        var end = wp.latLng;
+     // return L.marker(wp.latLng, {
+      //  icon: myViaIcon
+     // });
+    }
+  }
+}).addTo(map);
+}
+
+var londonParis = [[markersList[0]._latlng.lat,markersList[0]._latlng.lng], [markersList[1]._latlng.lat,markersList[1]._latlng.lng]];
+
+	var LeafIcon = L.Icon.extend({
+		options: {
+			iconSize:     [16, 16],
+			//shadowSize:   [50, 64],
+			iconAnchor:   [8, 8],
+			//shadowAnchor: [4, 62],
+			//popupAnchor:  [-3, -76]
+		}
+	});
+	
+
+routingControl.on('routeselected', function(e) {
+    var route = e.route;
+    var marker2 = L.Marker.movingMarker(route.coordinates,90000, {autostart: true,icon:new LeafIcon({iconUrl: '{$assetCore->baseUrl}/img/steering-wheel.png'})}).addTo(map);
+
 });
 
 
-';
+
+
+JS;
+
         $view->registerJs($js, $view::POS_END);
     }
 
@@ -126,7 +210,7 @@ marker.on("dragend", function(distance){
         ], $this->containerOptions);
         //Html::addCssClass($this->containerOptions, 'leaflet');
         Html::addCssStyle($this->containerOptions, "width:{$this->width};height:{$this->height};");
-        return Html::tag($this->containerTag, '',$this->containerOptions);
+        return Html::tag($this->containerTag, '', $this->containerOptions);
     }
 
 }
