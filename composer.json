@@ -13,7 +13,7 @@
         }
     ],
     "require": {
-        "bower-asset/leaflet": "^1.7"
+        "npm-asset/leaflet": "^1.9.*"
     },
     "autoload": {
         "psr-4": {
