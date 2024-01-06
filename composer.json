@@ -13,7 +13,7 @@
         }
     ],
     "require": {
-        "npm-asset/leaflet": "^1.9.*"
+        "npm-asset/leaflet": "^1.9.4"
     },
     "autoload": {
         "psr-4": {
