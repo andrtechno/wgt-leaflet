@@ -14,7 +14,7 @@ class LeafletAsset extends AssetBundle
     /**
      * @var string the directory that contains the source asset files for this asset bundle.
      */
-    public $sourcePath = '@bower/leaflet';
+    public $sourcePath = '@npm/leaflet';
 
     /**
      * @var array list of CSS files that this bundle contains.
