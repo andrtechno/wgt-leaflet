@@ -170,7 +170,7 @@ var routingControl = L.Routing.control({
 }).addTo(map);
 }
 
-var ggg = [[markersList[0]._latlng.lat,markersList[0]._latlng.lng], [markersList[1]._latlng.lat,markersList[1]._latlng.lng]];
+//var ggg = [[markersList[0]._latlng.lat,markersList[0]._latlng.lng], [markersList[1]._latlng.lat,markersList[1]._latlng.lng]];
 
 	var LeafIcon = L.Icon.extend({
 		options: {
