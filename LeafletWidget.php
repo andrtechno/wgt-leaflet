@@ -63,7 +63,7 @@ class LeafletWidget extends Widget
     {
         $this->routing = boolval($this->routing);
         $markers = Json::encode($this->markers);
-        LeafletAsset::register($view);
+        $asset = LeafletAsset::register($view);
         LeafletRoutingAsset::register($view);
         $assetCore = LeafletCoreAsset::register($view);
 
@@ -85,10 +85,12 @@ L.tileLayer("https://{s}.tile.osm.org/{z}/{x}/{y}.png", {
 
 var waypointsArray = [];
 var markersList = [];
+L.Icon.Default.imagePath = "{$asset->baseUrl}/images/";
 $.each(map_markers,function(i,mark){
 
     markersList[i] = L.marker(mark.coords,{
-        draggable: mark.draggable
+        draggable: mark.draggable,
+
     }).addTo(map);
     
     if(mark.popup){
