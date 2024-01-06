@@ -14,19 +14,19 @@ class LeafletAsset extends AssetBundle
     /**
      * @var string the directory that contains the source asset files for this asset bundle.
      */
-    public $sourcePath = '@npm/leaflet';
+    public $sourcePath = '@npm/leaflet/dist';
 
     /**
      * @var array list of CSS files that this bundle contains.
      */
     public $css = [
-        'dist/leaflet.css',
+        'leaflet.css',
     ];
 
     /**
      * @var array list of JavaScript files that this bundle contains.
      */
     public $js = [
-        'dist/leaflet.js',
+        'leaflet.js',
     ];
 }
